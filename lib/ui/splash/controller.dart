@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sahithyolsav_app/routes/names.dart';
-import 'package:sahithyolsav_app/ui/home/index.dart';
+import 'package:sahithyolsav_app/ui/home/Widgets/bottom_nav.dart';
 
 import 'state.dart';
 
@@ -11,6 +10,7 @@ class SplashController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(Duration(seconds: 3), () => Get.off(AppRouts.home));
+    Future.delayed(
+        const Duration(seconds: 3), () => Get.off(const NavigationPage()));
   }
 }

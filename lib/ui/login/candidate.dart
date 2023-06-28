@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sahithyolsav_app/back_end/spreadsheet/user.dart';
 import 'package:sahithyolsav_app/back_end/spreadsheet/user_sheets_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home/Widgets/bottom_nav.dart';
+import 'controller.dart';
 
 class CandidateLoginPage extends StatefulWidget {
   const CandidateLoginPage({super.key});
@@ -13,43 +15,7 @@ class CandidateLoginPage extends StatefulWidget {
 }
 
 class _CandidateLoginPageState extends State<CandidateLoginPage> {
-  final formKey = GlobalKey<FormState>();
-  late TextEditingController shift = TextEditingController();
-  late TextEditingController nameController;
-  late TextEditingController IdController;
-  late TextEditingController categoryController;
-  late TextEditingController unitController;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initUser();
-  }
-
-  User? user;
-  final Units = [
-    'Unit 1',
-    'Unit 2',
-    'Unit 3',
-    'Unit 4',
-    'Unit 5',
-  ];
-  final categories = [
-    'Category 1',
-    'Category 2',
-    'Category 3',
-    'Category 4',
-    'Category 5',
-  ];
-  String? unitValue;
-  String? cateValue;
-  void initUser() {
-    nameController = TextEditingController();
-    IdController = TextEditingController();
-    categoryController = TextEditingController();
-    unitController = TextEditingController();
-  }
-
+  final LoginController controller = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,12 +35,12 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
           child: Padding(
             padding: const EdgeInsets.all(30.0),
             child: Form(
-              key: formKey,
+              key: controller.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 80),
-                  Text(
+                  const SizedBox(height: 80),
+                  const Text(
                     'Login',
                     style: TextStyle(
                       color: Colors.white,
@@ -82,7 +48,7 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 80),
+                  const SizedBox(height: 80),
                   buildName(),
                   buildId(),
                   //buildUnit(),
@@ -90,38 +56,38 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
                   buildDpUnit(),
                   ElevatedButton(
                     onPressed: () async {
-                      final form = formKey.currentState!;
-                      final isValid = form.validate();
-                      final idn = await UserSheetsApi.getRowCount() + 1;
-
-                      if (isValid) {
-                        final user1 = User(
-                            id: IdController.text,
-                            name: nameController.text,
-                            category: cateValue.toString(),
-                            unit: unitValue.toString());
-                        final newUser = user1.copy(idn: idn);
-                        await UserSheetsApi.insert([newUser.toJson()]);
-                        await getUsers(IdController.text);
-
-                        if (nameController.text == user!.name) {
-                          Get.to(NavigationPage(
-                            user: user,
-                          ));
-                        }
-                      }
+                      controller.goLogin();
                     },
-                    child: Text("GO"),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.blue.shade400,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      textStyle: TextStyle(fontSize: 18),
+                      foregroundColor: Colors.blue.shade400,
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 15),
+                      textStyle: const TextStyle(fontSize: 18),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
+                    child: const Text("GO"),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      controller.goLoginNAC();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: const Color.fromARGB(80, 255, 255, 255),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 15),
+                      textStyle: const TextStyle(fontSize: 18),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text("Not a Candidate"),
                   ),
                 ],
               ),
@@ -136,16 +102,16 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
     final user = await UserSheetsApi.getById(id);
     print(user!.toJson());
     setState(() {
-      this.user = user;
+      controller.user = user;
     });
   }
 
   Padding buildCatogory() {
     return Padding(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       child: TextFormField(
-        controller: categoryController,
-        decoration: InputDecoration(
+        controller: controller.categoryController,
+        decoration: const InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Category',
           hintText: 'Enter Your Category',
@@ -158,24 +124,24 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
 
   Widget buildId() {
     return Padding(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       child: TextFormField(
-        controller: IdController,
+        controller: controller.IdController,
         decoration: InputDecoration(
-          hintStyle: TextStyle(color: Colors.white),
+          hintStyle: const TextStyle(color: Colors.white),
           labelText: 'Chest No',
           hintText: 'Enter Your Chest no',
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: const TextStyle(color: Colors.white),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         keyboardType: TextInputType.phone,
         validator: (value) =>
             value != null && value.isEmpty ? 'Enter cn' : null,
@@ -185,24 +151,24 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
 
   Widget buildName() {
     return Padding(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       child: TextFormField(
-        controller: nameController,
+        controller: controller.nameController,
         decoration: InputDecoration(
           labelText: 'Name',
           hintText: 'Enter Your name',
-          hintStyle: TextStyle(color: Colors.white),
-          labelStyle: TextStyle(color: Colors.white),
+          hintStyle: const TextStyle(color: Colors.white),
+          labelStyle: const TextStyle(color: Colors.white),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         validator: (value) =>
             value != null && value.isEmpty ? 'Enter name' : null,
       ),
@@ -213,12 +179,12 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
             border: Border.all(color: const Color.fromARGB(255, 245, 242, 242)),
             borderRadius: BorderRadius.circular(10)),
         //width: 280,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Column(
           children: <Widget>[
             Row(
@@ -227,23 +193,23 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
                   fit: FlexFit.tight,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.keyboard_arrow_down,
                         color: Colors.grey,
                       ),
                       iconSize: 24,
                       elevation: 16,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      style: const TextStyle(color: Colors.black, fontSize: 16),
                       isExpanded: true,
-                      hint: Text(
+                      hint: const Text(
                         "Select Unit",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
-                      value: unitValue,
-                      items: Units.map(buildMenuItem).toList(),
+                      value: controller.unitValue,
+                      items: controller.Units.map(buildMenuItem).toList(),
                       onChanged: (value) {
                         setState(() {
-                          this.unitValue = value;
+                          controller.unitValue = value;
                         });
                       },
                     ),
@@ -261,12 +227,12 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
             border: Border.all(color: const Color.fromARGB(255, 241, 237, 237)),
             borderRadius: BorderRadius.circular(10)),
         //width: 280,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Column(
           children: <Widget>[
             Row(
@@ -275,23 +241,23 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
                   fit: FlexFit.tight,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.keyboard_arrow_down,
-                        color: const Color.fromARGB(255, 247, 245, 245),
+                        color: Color.fromARGB(255, 247, 245, 245),
                       ),
                       iconSize: 24,
                       elevation: 16,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      style: const TextStyle(color: Colors.black, fontSize: 16),
                       isExpanded: true,
-                      hint: Text(
+                      hint: const Text(
                         "Select Category",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
-                      value: cateValue,
-                      items: categories.map(buildMenuItem).toList(),
+                      value: controller.cateValue,
+                      items: controller.categories.map(buildMenuItem).toList(),
                       onChanged: (value) {
                         setState(() {
-                          this.cateValue = value;
+                          controller.cateValue = value;
                         });
                       },
                     ),
@@ -308,10 +274,10 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
   Future insertUser() async {
     final users = [
       User(
-        id: IdController.text,
-        name: nameController.text,
-        category: categoryController.text,
-        unit: unitValue.toString(),
+        id: controller.IdController.text,
+        name: controller.nameController.text,
+        category: controller.categoryController.text,
+        unit: controller.unitValue.toString(),
       )
     ];
     final jsonUsers = users.map((user) => user.toJson()).toList();
@@ -320,7 +286,7 @@ class _CandidateLoginPageState extends State<CandidateLoginPage> {
   }
 
   DropdownMenuItem buildMenuItem(String item) => DropdownMenuItem(
-        child: Text(item),
         value: item,
+        child: Text(item),
       );
 }

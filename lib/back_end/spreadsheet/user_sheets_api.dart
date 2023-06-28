@@ -1,5 +1,6 @@
 import 'package:gsheets/gsheets.dart';
 import 'package:sahithyolsav_app/back_end/spreadsheet/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSheetsApi {
   static const _credentials = r'''{
@@ -16,7 +17,7 @@ class UserSheetsApi {
   "universe_domain": "googleapis.com"
 }
 ''';
-  static final _spreadsheetId = '1nGYZ5VojmxhFSPaLMkKb69Y30UUymlevXFzmETagqcI';
+  static const _spreadsheetId = '1nGYZ5VojmxhFSPaLMkKb69Y30UUymlevXFzmETagqcI';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
   static Future init() async {
@@ -32,7 +33,7 @@ class UserSheetsApi {
 
   static Future<User?> getById(String id) async {
     if (_userSheet == null) return null;
-    final json = await _userSheet!.values.rowByKey(id, fromColumn: 2);
+    final json = await _userSheet!.values.rowByKey(id, fromColumn: 1);
     return json == null ? null : User.fromJson(json as Map<String, dynamic>);
   }
 

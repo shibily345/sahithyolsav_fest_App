@@ -1,35 +1,69 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
-class SchedulePage extends StatelessWidget {
+import '../../../back_end/firebase/get_data.dart';
+import '../../../back_end/firebase/schedule_datas.dart';
+
+class SchedulePage extends StatefulWidget {
+  const SchedulePage({super.key});
+
+  @override
+  State<SchedulePage> createState() => _SchedulePageState();
+}
+
+class _SchedulePageState extends State<SchedulePage> {
+  final FirebaseController controller = Get.put(FirebaseController());
+
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
+      GlobalKey<LiquidPullToRefreshState>();
+
+  Future<void> _refreshData() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Calendar'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              GridView.count(
-                crossAxisCount: 3,
-                childAspectRatio: 1.1,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: List.generate(
-                  20,
-                  (index) => ProgramTile(
-                    time: _generateRandomTime(),
-                    program: 'Program ${index + 1}',
-                    venue: 'Venue ${index + 1}',
-                    color: _generateRandomColor(),
-                  ),
+    return LiquidPullToRefresh(
+      color: _generateRandomColor(),
+      backgroundColor: _generateRandomColor(),
+      key: _refreshIndicatorKey,
+      onRefresh: _refreshData,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: FutureBuilder<List<Event>>(
+            future: controller.fetchFirestorescheData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return const Center(child: Text('Error occurred'));
+              }
+
+              List<Event> eventList = snapshot.data ?? [];
+
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      2, // Adjust the number of columns as per your preference
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
                 ),
-              ),
-            ],
+                itemCount: eventList.length,
+                itemBuilder: (context, index) {
+                  return ProgramTile(
+                      time: ' ${eventList[index].time}',
+                      program: ' ${eventList[index].program}',
+                      venue: ' ${eventList[index].venue}',
+                      color: _generateRandomColor());
+                },
+              );
+            },
           ),
         ),
       ),
@@ -45,13 +79,6 @@ class SchedulePage extends StatelessWidget {
       1.0,
     );
   }
-
-  String _generateRandomTime() {
-    final Random random = Random();
-    final hour = random.nextInt(24);
-    final minute = random.nextInt(60);
-    return '$hour:${minute.toString().padLeft(2, '0')}';
-  }
 }
 
 class ProgramTile extends StatelessWidget {
@@ -61,6 +88,7 @@ class ProgramTile extends StatelessWidget {
   final Color color;
 
   const ProgramTile({
+    super.key,
     required this.time,
     required this.program,
     required this.venue,
@@ -70,8 +98,8 @@ class ProgramTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: color.withOpacity(0.4),
         borderRadius: BorderRadius.circular(10),
@@ -81,26 +109,29 @@ class ProgramTile extends StatelessWidget {
         children: [
           Text(
             time,
-            style: TextStyle(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
+            maxLines: 3,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
+            maxLines: 3,
             program,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
-              color: const Color.fromARGB(255, 35, 35, 35),
+              color: Color.fromARGB(255, 35, 35, 35),
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Text(
             venue,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.black,
             ),

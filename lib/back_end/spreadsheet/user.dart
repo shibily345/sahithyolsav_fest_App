@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 class UserFields {
-  static final String idn = 'idn';
-  static final String id = 'id';
-  static final String name = 'name';
-  static final String category = 'category';
-  static final String unit = 'unit';
+  static const String idn = 'idn';
+  static const String id = 'id';
+  static const String name = 'name';
+  static const String category = 'category';
+  static const String unit = 'unit';
   static List<String> getFields() => [idn, id, name, category, unit];
 }
 
@@ -36,6 +38,7 @@ class User {
         unit: unit ?? this.unit,
       );
   static User fromJson(Map<String, dynamic> json) => User(
+        idn: jsonDecode(json[UserFields.idn]),
         id: json[UserFields.id],
         name: json[UserFields.name],
         category: json[UserFields.category],

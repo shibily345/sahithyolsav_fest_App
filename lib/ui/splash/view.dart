@@ -1,51 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sahithyolsav_app/routes/names.dart';
-import 'package:sahithyolsav_app/ui/home/index.dart';
-import 'package:sahithyolsav_app/ui/login/index.dart';
+import 'package:sahithyolsav_app/ui/home/Widgets/bottom_nav.dart';
+import 'package:sahithyolsav_app/ui/login/candidate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// enum CircleSide { left, right }
-
-// extension ToPath on CircleSide {
-//   Path toPath(Size size) {
-//     final path = Path();
-//     late Offset offset;
-//     late bool clockwise;
-//     switch (this) {
-//       case CircleSide.left:
-//         path.moveTo(size.width, size.height);
-//         offset = Offset(size.width, size.height);
-//         clockwise = false;
-//         break;
-//       case CircleSide.right:
-//         path.moveTo(size.width, size.height);
-//         offset = Offset(size.width, size.height);
-//         clockwise = true;
-//         break;
-//     }
-//     path.arcToPoint(
-//       offset,
-//       radius: Radius.elliptical(size.width / 2, size.height / 2),
-//       clockwise: clockwise,
-//     );
-//     path.close();
-//     return path;
-//   }
-// }
-
-// class HalfCircleClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     // TODO: implement getClip
-//     throw UnimplementedError();
-//   }
-
-//   @override
-//   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-//     // TODO: implement shouldReclip
-//     throw UnimplementedError();
-//   }
-// }
+String? finalId;
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -57,7 +16,9 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    gotoLogin();
+    getValidationData().whenComplete(() async {
+      gotoLogin();
+    });
     super.initState();
   }
 
@@ -75,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
               child: Container(
             height: 300,
             width: 400,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/slsnamelogo.png"))),
           )),
@@ -86,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
             child: Container(
               height: 60,
               width: 100,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image:
                       DecorationImage(image: AssetImage("assets/label.png"))),
             ))
@@ -94,8 +55,20 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
+  Future getValidationData() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    var obtainedId = sharedPreferences.getString('id');
+    setState(() {
+      finalId = obtainedId;
+    });
+    print(finalId);
+  }
+
   Future<void> gotoLogin() async {
     await Future.delayed(const Duration(seconds: 3));
-    Get.to(LoginPage());
+    Get.to(finalId == null
+        ? () => const CandidateLoginPage()
+        : () => const NavigationPage());
   }
 }

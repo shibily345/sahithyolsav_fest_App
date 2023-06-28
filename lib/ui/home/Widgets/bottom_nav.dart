@@ -8,7 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sahithyolsav_app/ui/home/pages/profile.dart';
 import 'package:sahithyolsav_app/ui/home/pages/rank_list.dart';
 import 'package:sahithyolsav_app/ui/home/pages/schedule.dart';
-import 'package:sahithyolsav_app/ui/home/visitor_home.dart';
+import 'package:sahithyolsav_app/ui/home/pages/main_page.dart';
 
 import '../../../back_end/spreadsheet/user.dart';
 
@@ -41,10 +41,9 @@ class _NavigationPageState extends State<NavigationPage> {
 
   /// widget list
   final List<Widget> bottomBarPages = [
-    MainPage(),
-    SchedulePage(),
-    RanklistPage(),
-    ProfilePage(),
+    const MainPage(),
+    const SchedulePage(),
+    const RanklistPage(),
   ];
 
   @override
@@ -66,7 +65,7 @@ class _NavigationPageState extends State<NavigationPage> {
               removeMargins: false,
               bottomBarWidth: 500,
               durationInMilliSeconds: 300,
-              bottomBarItems: [
+              bottomBarItems: const [
                 ///svg example
                 BottomBarItem(
                   inActiveItem: Icon(Iconsax.home_hashtag),
@@ -76,7 +75,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   ),
                   itemLabel: 'Home',
                 ),
-                const BottomBarItem(
+                BottomBarItem(
                   inActiveItem: Icon(
                     Iconsax.calendar_1,
                     color: Colors.blueGrey,
@@ -87,7 +86,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   ),
                   itemLabel: 'Schedule',
                 ),
-                const BottomBarItem(
+                BottomBarItem(
                   inActiveItem: Icon(
                     Iconsax.ranking_1,
                     color: Colors.blueGrey,
@@ -98,17 +97,17 @@ class _NavigationPageState extends State<NavigationPage> {
                   ),
                   itemLabel: 'Rank',
                 ),
-                const BottomBarItem(
-                  inActiveItem: Icon(
-                    Iconsax.profile_2user,
-                    color: Colors.blueGrey,
-                  ),
-                  activeItem: Icon(
-                    Iconsax.profile_2user,
-                    color: Colors.yellow,
-                  ),
-                  itemLabel: 'Profile',
-                ),
+                // const BottomBarItem(
+                //   inActiveItem: Icon(
+                //     Iconsax.profile_2user,
+                //     color: Colors.blueGrey,
+                //   ),
+                //   activeItem: Icon(
+                //     Iconsax.profile_2user,
+                //     color: Colors.yellow,
+                //   ),
+                //   itemLabel: 'Profile',
+                // ),
               ],
               onTap: (index) {
                 /// perform action on tab change and to update pages you can update pages without pages
