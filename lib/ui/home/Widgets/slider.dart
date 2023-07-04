@@ -30,8 +30,12 @@ class _SliderWidgetState extends State<SliderWidget> {
 
         List<String> dataList = snapshot.data ?? [];
 
-        return CarouselSlider.builder(
-          itemCount: 5,
+        return dataList.isEmpty
+                ? const Center(
+                    child: Text('Coming Soon...'),
+                  )
+                : CarouselSlider.builder(
+          itemCount: dataList.length,
           itemBuilder: (context, index, realindex) {
             final images = dataList[index];
             return buildimage(images, index);

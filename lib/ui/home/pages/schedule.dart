@@ -47,22 +47,27 @@ class _SchedulePageState extends State<SchedulePage> {
 
               List<Event> eventList = snapshot.data ?? [];
 
-              return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      2, // Adjust the number of columns as per your preference
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
-                ),
-                itemCount: eventList.length,
-                itemBuilder: (context, index) {
-                  return ProgramTile(
-                      time: ' ${eventList[index].time}',
-                      program: ' ${eventList[index].program}',
-                      venue: ' ${eventList[index].venue}',
-                      color: _generateRandomColor());
-                },
-              );
+              return eventList.isEmpty
+                  ? const Center(
+                      child: Text('Coming Soon...'),
+                    )
+                  : GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:
+                            2, // Adjust the number of columns as per your preference
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0,
+                      ),
+                      itemCount: eventList.length,
+                      itemBuilder: (context, index) {
+                        return ProgramTile(
+                            time: ' ${eventList[index].time}',
+                            program: ' ${eventList[index].program}',
+                            venue: ' ${eventList[index].venue}',
+                            color: _generateRandomColor());
+                      },
+                    );
             },
           ),
         ),
@@ -107,35 +112,37 @@ class ProgramTile extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            time,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            maxLines: 3,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 18.0),
+            child: Text(program,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
           ),
           const SizedBox(height: 10),
           Text(
+            overflow: TextOverflow.ellipsis,
             maxLines: 3,
-            program,
+            time,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              fontSize: 18,
               color: Color.fromARGB(255, 35, 35, 35),
             ),
           ),
           const SizedBox(height: 5),
-          Text(
-            venue,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-            ),
-          ),
+          Text(venue,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
+              overflow: TextOverflow.ellipsis),
         ],
       ),
     );

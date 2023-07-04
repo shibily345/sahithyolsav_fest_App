@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: SlidingUpPanel(
         parallaxEnabled: true,
         parallaxOffset: .5,
@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
 
   Widget _buildGridView() {
     return SizedBox(
-      height: 400,
+      height: Get.height * 0.48,
       width: Get.width,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -153,49 +153,55 @@ class _MainPageState extends State<MainPage> {
               children: [
                 buildDragHandle(),
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
-                    itemCount: programs!.length,
-                    itemBuilder: (context, index) {
-                      Program program = reversedPrograms[index];
-                      int reversedIndex = reversedPrograms.length - 1 - index;
-                      String rollNo = program.students
-                          .map((student) => student['roll'])
-                          .join(', ');
-                      List<String?> rollNumbers = program.students
-                          .map((student) => student['roll no'])
-                          .toList();
+                  child: programs!.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.all(18.0),
+                          child: Text('Results Coming Soon...'),
+                        )
+                      : GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          itemCount: programs.length,
+                          itemBuilder: (context, index) {
+                            Program program = reversedPrograms[index];
+                            int reversedIndex =
+                                reversedPrograms.length - 1 - index;
+                            String rollNo = program.students
+                                .map((student) => student['roll'])
+                                .join(', ');
+                            List<String?> rollNumbers = program.students
+                                .map((student) => student['roll no'])
+                                .toList();
 
-                      String? rollNo1 =
-                          rollNumbers.isNotEmpty ? rollNumbers[0] : '';
-                      String? rollNo2 =
-                          rollNumbers.length > 1 ? rollNumbers[1] : '';
-                      String? rollNo3 =
-                          rollNumbers.length > 2 ? rollNumbers[2] : '';
+                            String? rollNo1 =
+                                rollNumbers.isNotEmpty ? rollNumbers[0] : '';
+                            String? rollNo2 =
+                                rollNumbers.length > 1 ? rollNumbers[1] : '';
+                            String? rollNo3 =
+                                rollNumbers.length > 2 ? rollNumbers[2] : '';
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProgramDetailsScreen(program: program),
-                            ),
-                          );
-                        },
-                        child: ResultBox(
-                            result: reversedIndex + 1,
-                            first: rollNo1!,
-                            second: rollNo2!,
-                            third: rollNo3!,
-                            cate: program.category,
-                            program: program.program),
-                      );
-                    },
-                  ),
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProgramDetailsScreen(program: program),
+                                  ),
+                                );
+                              },
+                              child: ResultBox(
+                                  result: reversedIndex + 1,
+                                  first: rollNo1!,
+                                  second: rollNo2!,
+                                  third: rollNo3!,
+                                  cate: program.category,
+                                  program: program.program),
+                            );
+                          },
+                        ),
                 ),
               ],
             );

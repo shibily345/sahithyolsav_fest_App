@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:marquee/marquee.dart';
 
 @immutable
 class ResultBox extends StatelessWidget {
@@ -54,29 +54,9 @@ class ResultBox extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 10,
+            bottom: 7,
             left: 20,
-            child: Row(
-              children: [
-                Text(
-                  cate,
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 75, 75, 75)),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  program,
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 19, 19, 19)),
-                ),
-              ],
-            ),
+            child: autsctext(text: '$cate $program'),
           ),
           Positioned(
             bottom: 30,
@@ -93,7 +73,7 @@ class ResultBox extends StatelessWidget {
             child: Text(
               first,
               style: GoogleFonts.fraunces(
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: const Color.fromARGB(255, 255, 64, 0)),
             ),
@@ -104,7 +84,7 @@ class ResultBox extends StatelessWidget {
             child: Text(
               second,
               style: GoogleFonts.adamina(
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: const Color.fromARGB(255, 115, 114, 114)),
             ),
@@ -115,12 +95,39 @@ class ResultBox extends StatelessWidget {
             child: Text(
               third,
               style: GoogleFonts.adamina(
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: const Color.fromARGB(255, 103, 39, 39)),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class autsctext extends StatelessWidget {
+  final String text;
+  const autsctext({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 20,
+      width: 190,
+      child: Marquee(
+        text: text,
+        style: const TextStyle(fontSize: 16.0),
+        scrollAxis: Axis.horizontal,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        blankSpace: 20.0,
+        velocity: 70.0,
+        pauseAfterRound: const Duration(seconds: 2),
+        startPadding: 10.0,
+        accelerationDuration: const Duration(seconds: 2),
+        accelerationCurve: Curves.linear,
+        decelerationDuration: const Duration(milliseconds: 500),
+        decelerationCurve: Curves.easeOut,
       ),
     );
   }

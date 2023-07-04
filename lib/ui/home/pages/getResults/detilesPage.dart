@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../back_end/firebase/schedule_datas.dart';
+import '../../Widgets/colors.dart';
 
 class ProgramDetailsScreen extends StatelessWidget {
   final Program program;
@@ -15,6 +16,7 @@ class ProgramDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: green,
         title: const Text('Result Details'),
       ),
       body: Padding(
@@ -31,9 +33,10 @@ class ProgramDetailsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
                     child: Text(
-                  '${program.category}  ${program.program}  ',
+                  '${program.category}  ${program.program} ',
                   style: GoogleFonts.aBeeZee(
                       fontSize: 20, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
                 ))),
             const SizedBox(height: 16.0),
             ListView.builder(

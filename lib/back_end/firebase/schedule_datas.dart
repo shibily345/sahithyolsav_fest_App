@@ -1,9 +1,15 @@
+import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
+
 class Event {
   final String time;
   final String program;
   final String venue;
-
-  Event({required this.time, required this.program, required this.venue});
+  final Timestamp timestamp;
+  Event(
+      {required this.time,
+      required this.program,
+      required this.venue,
+      required this.timestamp});
 }
 
 class MapData {

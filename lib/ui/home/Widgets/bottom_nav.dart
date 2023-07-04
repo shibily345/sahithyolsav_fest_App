@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:sahithyolsav_app/ui/home/Widgets/colors.dart';
 
-import 'package:sahithyolsav_app/ui/home/pages/profile.dart';
 import 'package:sahithyolsav_app/ui/home/pages/rank_list.dart';
 import 'package:sahithyolsav_app/ui/home/pages/schedule.dart';
 import 'package:sahithyolsav_app/ui/home/pages/main_page.dart';
@@ -59,41 +59,44 @@ class _NavigationPageState extends State<NavigationPage> {
       bottomNavigationBar: (bottomBarPages.length <= maxCount)
           ? AnimatedNotchBottomBar(
               notchBottomBarController: _controller,
-              color: Colors.white,
+              color: green,
               showLabel: false,
-              notchColor: Colors.black87,
+              notchColor: greenl2,
               removeMargins: false,
               bottomBarWidth: 500,
               durationInMilliSeconds: 300,
               bottomBarItems: const [
                 ///svg example
                 BottomBarItem(
-                  inActiveItem: Icon(Iconsax.home_hashtag),
+                  inActiveItem: Icon(
+                    Iconsax.home_hashtag,
+                    color: Colors.white,
+                  ),
                   activeItem: Icon(
                     Iconsax.home,
-                    color: Colors.green,
+                    color: Colors.white,
                   ),
                   itemLabel: 'Home',
                 ),
                 BottomBarItem(
                   inActiveItem: Icon(
                     Iconsax.calendar_1,
-                    color: Colors.blueGrey,
+                    color: Colors.white,
                   ),
                   activeItem: Icon(
                     Iconsax.calendar_2,
-                    color: Colors.pink,
+                    color: Colors.white,
                   ),
                   itemLabel: 'Schedule',
                 ),
                 BottomBarItem(
                   inActiveItem: Icon(
                     Iconsax.ranking_1,
-                    color: Colors.blueGrey,
+                    color: Colors.white,
                   ),
                   activeItem: Icon(
                     Iconsax.ranking_1,
-                    color: Colors.yellow,
+                    color: Colors.white,
                   ),
                   itemLabel: 'Rank',
                 ),

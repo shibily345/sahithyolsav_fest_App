@@ -39,6 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_easyloading: ^3.0.5
+  flutter_launcher_icons: ^0.13.1
   flutter_staggered_grid_view: null
   flutter_svg: ^2.0.6
   get: ^4.6.5
@@ -47,6 +48,7 @@ dependencies:
   icons_plus: ^4.0.0
   iconsax: ^0.0.8
   liquid_pull_to_refresh: ^3.0.1
+  marquee: ^2.2.3
   provider: ^6.0.5
   shared_preferences: ^2.1.2
   sliding_up_panel: ^2.0.0+1
@@ -56,6 +58,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/slsapplogo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

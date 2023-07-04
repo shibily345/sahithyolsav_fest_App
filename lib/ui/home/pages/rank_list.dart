@@ -72,6 +72,7 @@ class _RanklistPageState extends State<RanklistPage> {
 
   Widget _buildGridView() {
     return Container(
+      padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
@@ -95,11 +96,12 @@ class _RanklistPageState extends State<RanklistPage> {
             height: 560,
           ),
           Positioned(
-            left: 170,
-            bottom: 550,
+            left: Get.width * 0.40,
+            bottom: Get.height * 0.62,
             child: RotatedBox(
               quarterTurns: 3,
               child: Text(
+                overflow: TextOverflow.ellipsis,
                 firstTeamName ?? 'Loading...',
                 style: GoogleFonts.oleoScript(
                     fontSize: 45,
@@ -109,12 +111,13 @@ class _RanklistPageState extends State<RanklistPage> {
             ),
           ),
           Positioned(
-            right: 70,
-            bottom: 510,
+            left: Get.width * 0.70,
+            bottom: Get.height * 0.58,
             child: RotatedBox(
               quarterTurns: 3,
               child: Text(
-                secondTeamName ?? '',
+                overflow: TextOverflow.ellipsis,
+                thirdTeamName ?? '',
                 style: GoogleFonts.oleoScript(
                     fontSize: 45,
                     fontWeight: FontWeight.bold,
@@ -123,12 +126,13 @@ class _RanklistPageState extends State<RanklistPage> {
             ),
           ),
           Positioned(
-            left: 60,
-            bottom: 540,
+            left: Get.width * 0.15,
+            bottom: Get.height * 0.6,
             child: RotatedBox(
               quarterTurns: 3,
               child: Text(
-                thirdTeamName ?? '',
+                overflow: TextOverflow.ellipsis,
+                secondTeamName ?? '',
                 style: GoogleFonts.oleoScript(
                     fontSize: 45,
                     fontWeight: FontWeight.bold,
@@ -137,39 +141,6 @@ class _RanklistPageState extends State<RanklistPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildPanel() {
-    return Container(
-      color: Colors.red,
-      child: const Center(
-        child: Text(
-          'Panel',
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCollapsedPanel() {
-    return GestureDetector(
-      onTap: () {
-        if (_isExpanded) {
-          _panelController.close();
-        } else {
-          _panelController.open();
-        }
-      },
-      child: Container(
-        color: Colors.red,
-        child: Center(
-          child: Text(
-            _isExpanded ? 'Collapse' : 'Expand',
-            style: const TextStyle(fontSize: 24),
-          ),
-        ),
       ),
     );
   }
@@ -229,51 +200,58 @@ class _RanklistPageState extends State<RanklistPage> {
         final results = data!['results'] as String;
         final teams = List<Map<String, dynamic>>.from(data['teams']);
 
-        return Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'After $results Results', // Display the ranking number
-              style: GoogleFonts.yatraOne(
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: teams.length,
-                itemBuilder: (context, index) {
-                  final team = teams[index];
-                  final teamName = team['teamName'] as String;
-                  final points = team['points'] as int;
-                  final ranking = index + 1;
-                  if (teams.isNotEmpty) {
-                    firstTeamName = teams[0]['teamName'] as String?;
-                  }
-                  if (teams.length >= 2) {
-                    secondTeamName = teams[1]['teamName'] as String?;
-                  }
-                  if (teams.length >= 3) {
-                    thirdTeamName = teams[2]['teamName'] as String?;
-                  }
-                  return ListTile(
-                    leading: Text(
-                      '$ranking', // Display the ranking number
-                      style: GoogleFonts.yatraOne(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                      ),
+        return teams.isEmpty
+            ? const Center(
+                child: Text('Coming Soon...'),
+              )
+            : Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    overflow: TextOverflow.ellipsis,
+                    'After $results Results', // Display the ranking number
+                    style: GoogleFonts.yatraOne(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
                     ),
-                    title: Text(teamName),
-                    trailing: Text(' $points'),
-                  );
-                },
-              ),
-            ),
-          ],
-        );
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: teams.length,
+                      itemBuilder: (context, index) {
+                        final team = teams[index];
+                        final teamName = team['teamName'] as String;
+                        final points = team['points'] as int;
+                        final ranking = index + 1;
+                        if (teams.isNotEmpty) {
+                          firstTeamName = teams[0]['teamName'] as String?;
+                        }
+                        if (teams.length >= 2) {
+                          secondTeamName = teams[1]['teamName'] as String?;
+                        }
+                        if (teams.length >= 3) {
+                          thirdTeamName = teams[2]['teamName'] as String?;
+                        }
+                        return ListTile(
+                          leading: Text(
+                            '$ranking', // Display the ranking number
+                            style: GoogleFonts.yatraOne(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
+                          ),
+                          title:
+                              Text(overflow: TextOverflow.ellipsis, teamName),
+                          trailing:
+                              Text(overflow: TextOverflow.ellipsis, ' $points'),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
       },
     );
   }

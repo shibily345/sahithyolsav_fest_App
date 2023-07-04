@@ -7,7 +7,11 @@ class FirebaseController extends GetxController {
   List<String> banners = [];
   int activeIndex = 0;
   Future getBanners() async {
-    await FirebaseFirestore.instance.collection('banners').get().then(
+    FirebaseFirestore.instance
+        .collection('banners')
+        .orderBy('timestamp', descending: true)
+        .get()
+        .then(
           (snapshot) => snapshot.docs.forEach((element) {
             banners.add(element.reference.id);
           }),
@@ -17,15 +21,19 @@ class FirebaseController extends GetxController {
   Future<List<String>> fetchFirestoreData() async {
     List<String> dataList = [];
 
-    // Replace 'collectionName' with the actual name of your collection
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('banners').get();
 
     for (var doc in querySnapshot.docs) {
-      // Replace 'fieldName' with the name of the field containing the data
       String data = doc.get('image') ?? '';
+
+      // Assuming you have a 'timestamp' field in your documents
+      // Timestamp timestamp = doc.get('timestamp');
+
       dataList.add(data);
     }
+
+    // Sort the dataList based on the timestamp in ascending order
 
     return dataList;
   }
@@ -33,19 +41,23 @@ class FirebaseController extends GetxController {
   Future<List<Event>> fetchFirestorescheData() async {
     List<Event> eventList = [];
 
-    // Replace 'collectionName' with the actual name of your collection
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('schedules').get();
 
     for (var doc in querySnapshot.docs) {
-      // Replace 'timeField', 'programField', 'venueField' with the actual field names in your documents
-      String time = doc.get('eventName') ?? '';
-      String program = doc.get('time') ?? '';
+      String program = doc.get('eventName') ?? '';
+      String time = doc.get('time') ?? '';
       String venue = doc.get('venue') ?? '';
+      // Assuming you have a 'timestamp' field in your documents
+      Timestamp timestamp = doc.get('timestamp');
 
-      Event event = Event(time: time, program: program, venue: venue);
+      Event event = Event(
+          time: time, program: program, venue: venue, timestamp: timestamp);
       eventList.add(event);
     }
+
+    // Sort the eventList based on the timestamp in descending order
+    eventList.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
     return eventList;
   }

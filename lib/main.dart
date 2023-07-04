@@ -28,10 +28,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // Primary colors
+        primaryColor: Colors.blueGrey,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 235, 243, 242),
+        canvasColor: Colors.grey[200],
+        // Text theme
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+              fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white),
+          bodyLarge: TextStyle(fontSize: 16.0, color: Colors.white),
+          // Add more text styles as needed
+        ),
       ),
       initialRoute: "/",
       getPages: [GetPage(name: "/", page: () => const SplashPage())],
+
       // home: SplashPage(),
     );
   }
